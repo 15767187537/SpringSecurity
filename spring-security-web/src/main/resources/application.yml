@@ -1,0 +1,35 @@
+server:
+  port: 80
+spring:
+  thymeleaf:
+    cache: false #关闭thymeleaf缓存
+  datasource:
+    url: jdbc:mysql://47.119.129.252:3306/xztx?useUnicode=true&characterEncoding=utf-8&autoReconnectForPools=true
+    username: root
+    password: 123456
+#    password: ENC(Oya0yLaL+Z4cOegFDjKN4A==)
+    driver-class-name: com.mysql.jdbc.Driver
+    platform: mysql
+    type: com.alibaba.druid.pool.DruidDataSource
+xztx:
+  security:
+    authentication:
+      loginPage: /login/page # 重定向到登录界面
+      loginProcessingUrl: /login/form # 登录表单提交的url，
+      usernameParameter: name # 接收表单里的账户(如果不是username，就得重新定义)
+      passwordParameter: pwd # 接收表单里的密码(如果不是password，就得重新定义)
+      staticPaths:
+        - /dist/**
+        - /modules/**
+        - /plugins/**
+      loginResponseType: redirect # 返回结果为json格式或redirect格式
+mybatis:
+  mapper-locations: classpath*:/mapper/*.xml # 映射xml文件
+  type-aliases-package: com.xztx.dao # 映射dao层
+  configuration:
+    map-underscore-to-camel-case: true # 是否采用驼峰命名法
+#mybatis-plus:
+#  mapper-locations: classpath*:/mapper/*.xml # 映射xml文件
+#  type-aliases-package: com.xztx.dao # 映射dao层
+#  configuration:
+#    map-underscore-to-camel-case: true
