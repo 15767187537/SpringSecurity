@@ -43,7 +43,7 @@ public class MobileValidateFilter extends OncePerRequestFilter {
                     // 用户输入的验证码为空
                     throw new ValidateCodeException("验证码为空");
                 }
-                if(sessionCode.equals(paramCode)) {
+                if(!sessionCode.equals(paramCode)) {
                     // 用户输入验证码错误
                     throw new ValidateCodeException("验证码输入错误");
                 }

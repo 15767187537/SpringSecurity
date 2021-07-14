@@ -1,6 +1,8 @@
 package com.xztx.config;
 
 import com.xztx.authentication.code.ImageCodeValidateFilter;
+import com.xztx.authentication.mobile.MobileAuthenticationConfig;
+import com.xztx.authentication.mobile.MobileValidateFilter;
 import com.xztx.properties.SecurityProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,7 +49,11 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private DataSource dataSource;
 
+    @Autowired
+    private MobileValidateFilter mobileValidateFilter;
 
+    @Autowired
+    private MobileAuthenticationConfig mobileAuthenticationConfig;
 
     /***
      * 资源权限配置:
@@ -58,7 +64,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 //        http.httpBasic() // 采用httpBasic方式进行认证
-        http.addFilterBefore(imageCodeValidateFilter, UsernamePasswordAuthenticationFilter.class) // 在验证用户名密码Filter之前使用
+        http.addFilterBefore(mobileValidateFilter, UsernamePasswordAuthenticationFilter.class)
+            .addFilterBefore(imageCodeValidateFilter, UsernamePasswordAuthenticationFilter.class) // 在验证用户名密码Filter之前使用
             .formLogin() // 采用表单方式进行认证
             .loginPage(securityProperties.getAuthentication().getLoginPage()) // 重定向到登录界面
             .loginProcessingUrl(securityProperties.getAuthentication().getLoginProcessingUrl()) // 登录表单提交的url，
@@ -75,7 +82,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .tokenRepository(jdbcTokenRepository()) //保存登录信息
             .tokenValiditySeconds(60*60*24*7) //记住我有效时长
         ;
-
+        http.apply(mobileAuthenticationConfig);
     }
 
     /***
