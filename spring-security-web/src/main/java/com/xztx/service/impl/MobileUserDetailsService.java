@@ -35,7 +35,7 @@ public class MobileUserDetailsService implements UserDetailsService {
         // 2. 如果有用户信息，则再获取权限资源
         // 3. 封装用户信息
 
-        return new User("meng", "", true, true, true, true,
+        return new User(customerUserDTO.getCustomerUserName(), "", true, true, true, true,
                 AuthorityUtils.commaSeparatedStringToAuthorityList("ADMIN"));
     }
 }
