@@ -6,6 +6,7 @@ import com.xztx.exception.ValidateCodeException;
 import com.xztx.service.UserCustomerService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -43,14 +44,15 @@ public class MobileValidateFilter extends OncePerRequestFilter {
                     // 用户输入的验证码为空
                     throw new ValidateCodeException("验证码为空");
                 }
-                if(!sessionCode.equals(paramCode)) {
+                if(!sessionCode.equalsIgnoreCase(paramCode)) {
                     // 用户输入验证码错误
                     throw new ValidateCodeException("验证码输入错误");
                 }
-            } catch (ValidateCodeException e) {
+            } catch (AuthenticationException e) {
                 // 调用失败过滤器
                 e.printStackTrace();
                 customAuthenticationFailureHandler.onAuthenticationFailure(request,response, e);
+                return ;
             }
 
         }

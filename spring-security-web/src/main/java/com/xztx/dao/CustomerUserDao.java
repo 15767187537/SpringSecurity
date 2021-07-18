@@ -10,4 +10,5 @@ public interface CustomerUserDao {
 
     List<CustomerUserDTO> getUserList(CustomerUserDTO customerUserDTO);
 
+    CustomerUserDTO getUserInfoByMobile(String mobile);
 }

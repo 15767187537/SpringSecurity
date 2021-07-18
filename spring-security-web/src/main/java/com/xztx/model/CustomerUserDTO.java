@@ -8,6 +8,8 @@ public class CustomerUserDTO implements Serializable {
 
     private String customerUserName;
 
+    private String customerUserMobile;
+
     private String customerUserPassword;
 
     private Integer status;
@@ -26,6 +28,14 @@ public class CustomerUserDTO implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
+    }
+
+    public String getCustomerUserMobile() {
+        return customerUserMobile;
+    }
+
+    public void setCustomerUserMobile(String customerUserMobile) {
+        this.customerUserMobile = customerUserMobile;
     }
 
     public String getCustomerUserName() {

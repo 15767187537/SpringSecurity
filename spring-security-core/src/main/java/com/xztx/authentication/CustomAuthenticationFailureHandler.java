@@ -4,6 +4,8 @@ import com.xztx.properties.AuthenticationProperties;
 import com.xztx.properties.LoginResponseType;
 import com.xztx.properties.SecurityProperties;
 import com.xztx.result.ResultMessage;
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;
@@ -38,7 +40,12 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
             httpServletResponse.setContentType("application/json;charset=UTF-8");
             httpServletResponse.getWriter().write(resultMessage.toJsonString());
         }else {
-            super.setDefaultFailureUrl(securityProperties.getAuthentication().getLoginPage() + "?error");
+//            super.setDefaultFailureUrl(securityProperties.getAuthentication().getLoginPage() + "?error");
+            String referer = httpServletRequest.getHeader("Referer");
+            System.out.println("referer: " + referer);
+            String url = StringUtils.substringBefore(referer, "?");
+            System.out.println("上一次访问的页面url: " + url);
+            super.setDefaultFailureUrl(url + "?error");
             super.onAuthenticationFailure(httpServletRequest, httpServletResponse, e);
         }
     }

@@ -36,7 +36,7 @@ public class MobileAuthenticationConfig extends SecurityConfigurerAdapter<Defaul
         MobileAuthenticationProvider provider = new MobileAuthenticationProvider();
         provider.setUserDetailsService(mobileUserDetailsService);
 
-        // 将provider绑定到HTTPSecurity中，并将手机号认证过滤器绑定到用户名IMA认证过滤器之后
+        // 将provider绑定到HTTPSecurity中，并将手机号认证过滤器绑定到用户名认证过滤器之后
         http.authenticationProvider(provider).addFilterAfter(mobileAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
 
     }

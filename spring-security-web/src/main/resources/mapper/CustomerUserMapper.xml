@@ -2,20 +2,37 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.xztx.dao.CustomerUserDao">
 
-<select id="getUserList" parameterType="com.xztx.model.CustomerUserDTO" resultType="com.xztx.model.CustomerUserDTO">
-    select
-        id,
-        customer_user_name as customerUserName,
-        customer_user_password as customerUserPassword,
-        status as status,
-        create_user as createUser,
-        update_user as updateUser,
-        create_time as createTime,
-        modify_time as modifyTime
-    from
-        customer_user
-    where
-        customer_user_name = #{customerUserName, jdbcType=VARCHAR}
-</select>
+    <select id="getUserList" parameterType="com.xztx.model.CustomerUserDTO" resultType="com.xztx.model.CustomerUserDTO">
+        select
+            id,
+            customer_user_name as customerUserName,
+            customer_user_password as customerUserPassword,
+            status as status,
+            create_user as createUser,
+            update_user as updateUser,
+            create_time as createTime,
+            modify_time as modifyTime
+        from
+            customer_user
+        where
+            customer_user_name = #{customerUserName, jdbcType=VARCHAR}
+    </select>
+
+    <select id="getUserInfoByMobile"  resultType="com.xztx.model.CustomerUserDTO">
+        select
+            id,
+            customer_user_name as customerUserName,
+            customer_user_mobile as customerUserMobile,
+            customer_user_password as customerUserPassword,
+            status as status,
+            create_user as createUser,
+            update_user as updateUser,
+            create_time as createTime,
+            modify_time as modifyTime
+        from
+            customer_user
+        where
+            customer_user_mobile = #{customerUserMobile, jdbcType=VARCHAR}
+    </select>
 
 </mapper>

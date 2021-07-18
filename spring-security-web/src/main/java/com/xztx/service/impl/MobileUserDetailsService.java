@@ -1,7 +1,11 @@
 package com.xztx.service.impl;
 
+import com.xztx.dao.CustomerUserDao;
+import com.xztx.model.CustomerUserDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,11 +21,17 @@ import org.springframework.stereotype.Component;
 public class MobileUserDetailsService implements UserDetailsService {
     Logger logger = LoggerFactory.getLogger(getClass());
 
+    @Autowired
+    private CustomerUserDao customerUserDao;
 
     @Override
     public UserDetails loadUserByUsername(String mobile) throws UsernameNotFoundException {
         logger.info("请求的手机号是：" + mobile);
         // 1. 通过手机号查询用户信息
+        CustomerUserDTO customerUserDTO = customerUserDao.getUserInfoByMobile(mobile);
+        if(customerUserDTO == null) {
+            throw new AuthenticationServiceException("该手机号未注册");
+        }
         // 2. 如果有用户信息，则再获取权限资源
         // 3. 封装用户信息
 
