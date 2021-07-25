@@ -1,5 +1,8 @@
 server:
   port: 80
+  servlet:
+    session:
+      timeout: 1m #该值一定要配单位，且值一定要大于1分钟，不然是无效的
 spring:
   thymeleaf:
     cache: false #关闭thymeleaf缓存

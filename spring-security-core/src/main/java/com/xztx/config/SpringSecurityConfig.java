@@ -21,6 +21,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.session.InvalidSessionStrategy;
 
 import javax.sql.DataSource;
 
@@ -55,6 +56,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private MobileAuthenticationConfig mobileAuthenticationConfig;
 
+    @Autowired
+    private InvalidSessionStrategy invalidSessionStrategy;
+
     /***
      * 资源权限配置:
      * 被拦截的资源
@@ -81,6 +85,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     securityProperties.getAuthentication().getMobileCodeUrl()
                     ).permitAll()
             .anyRequest().authenticated() //所有访问该应用的http请求都要通过身份认证才可以进行访问
+            .and()
+            .sessionManagement().invalidSessionStrategy(invalidSessionStrategy)
             .and()
             .rememberMe() // 记住功能配置
             .tokenRepository(jdbcTokenRepository()) //保存登录信息
