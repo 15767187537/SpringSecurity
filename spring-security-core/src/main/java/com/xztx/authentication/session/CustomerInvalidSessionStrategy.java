@@ -3,6 +3,7 @@ package com.xztx.authentication.session;
 import com.xztx.result.ResultMessage;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.web.session.InvalidSessionStrategy;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

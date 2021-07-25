@@ -22,6 +22,7 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.session.InvalidSessionStrategy;
+import org.springframework.security.web.session.SessionInformationExpiredStrategy;
 
 import javax.sql.DataSource;
 
@@ -59,6 +60,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private InvalidSessionStrategy invalidSessionStrategy;
 
+    @Autowired
+    private SessionInformationExpiredStrategy sessionInformationExpiredStrategy;
+
     /***
      * 资源权限配置:
      * 被拦截的资源
@@ -86,11 +90,14 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     ).permitAll()
             .anyRequest().authenticated() //所有访问该应用的http请求都要通过身份认证才可以进行访问
             .and()
-            .sessionManagement().invalidSessionStrategy(invalidSessionStrategy)
-            .and()
             .rememberMe() // 记住功能配置
             .tokenRepository(jdbcTokenRepository()) //保存登录信息
             .tokenValiditySeconds(securityProperties.getAuthentication().getTokenValiditySeconds()) //记住我有效时长
+            .and()
+            .sessionManagement()
+            .invalidSessionStrategy(invalidSessionStrategy)
+            .maximumSessions(1) // 只允许一个账户进行登录
+            .expiredSessionStrategy(sessionInformationExpiredStrategy) // 引入只允许一个用户登录具体实现
         ;
         http.apply(mobileAuthenticationConfig);
     }

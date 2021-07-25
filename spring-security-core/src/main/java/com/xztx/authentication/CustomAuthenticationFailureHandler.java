@@ -43,7 +43,13 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
 //            super.setDefaultFailureUrl(securityProperties.getAuthentication().getLoginPage() + "?error");
             String referer = httpServletRequest.getHeader("Referer");
             System.out.println("referer: " + referer);
-            String url = StringUtils.substringBefore(referer, "?");
+            Object toAuthentication = httpServletRequest.getAttribute("toAuthentication");
+            String url = "";
+            if(toAuthentication  == null) {
+                url = StringUtils.substringBefore(referer, "?");
+            }else {
+                url = securityProperties.getAuthentication().getLoginPage();
+            }
             System.out.println("上一次访问的页面url: " + url);
             super.setDefaultFailureUrl(url + "?error");
             super.onAuthenticationFailure(httpServletRequest, httpServletResponse, e);
