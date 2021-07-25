@@ -11,6 +11,7 @@ import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.authentication.RememberMeServices;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -33,6 +34,9 @@ public class MobileAuthenticationConfig extends SecurityConfigurerAdapter<Defaul
 
         // 手机号验证添加记住我功能
         mobileAuthenticationFilter.setRememberMeServices(http.getSharedObject(RememberMeServices.class));
+
+        // session重复登录 管理
+        mobileAuthenticationFilter.setSessionAuthenticationStrategy(http.getSharedObject(SessionAuthenticationStrategy.class));
 
         // 把验证成功或失败的handler添加进去
         mobileAuthenticationFilter.setAuthenticationSuccessHandler(customAuthenticationSuccessHandler);

@@ -98,6 +98,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .invalidSessionStrategy(invalidSessionStrategy)
             .maximumSessions(1) // 只允许一个账户进行登录
             .expiredSessionStrategy(sessionInformationExpiredStrategy) // 引入只允许一个用户登录具体实现
+            .maxSessionsPreventsLogin(true);
         ;
         http.apply(mobileAuthenticationConfig);
     }
