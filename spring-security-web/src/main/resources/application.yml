@@ -23,6 +23,10 @@ xztx:
         - /modules/**
         - /plugins/**
       loginResponseType: redirect # 返回结果为json格式或redirect格式
+      imageCodeUrl: /image/code # 获取图形验证码地址
+      mobilePage: /mobile/page # 发送手机验证码地址
+      mobileCodeUrl: /code/mobile # 前往手机登录页面
+      tokenValiditySeconds: 604800 # 记住我时效
 mybatis:
   mapper-locations: classpath*:/mapper/*.xml # 映射xml文件
   type-aliases-package: com.xztx.dao # 映射dao层

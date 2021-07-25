@@ -75,12 +75,16 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .failureHandler(customAuthenticationFailureHandler)
             .and()
             .authorizeRequests() // 认证请求
-            .mvcMatchers(securityProperties.getAuthentication().getLoginPage(),"/image/code", "/mobile/page", "/code/mobile").permitAll()
+            .mvcMatchers(securityProperties.getAuthentication().getLoginPage(),
+                    securityProperties.getAuthentication().getImageCodeUrl(),
+                    securityProperties.getAuthentication().getMobilePage(),
+                    securityProperties.getAuthentication().getMobileCodeUrl()
+                    ).permitAll()
             .anyRequest().authenticated() //所有访问该应用的http请求都要通过身份认证才可以进行访问
             .and()
             .rememberMe() // 记住功能配置
             .tokenRepository(jdbcTokenRepository()) //保存登录信息
-            .tokenValiditySeconds(60*60*24*7) //记住我有效时长
+            .tokenValiditySeconds(securityProperties.getAuthentication().getTokenValiditySeconds()) //记住我有效时长
         ;
         http.apply(mobileAuthenticationConfig);
     }

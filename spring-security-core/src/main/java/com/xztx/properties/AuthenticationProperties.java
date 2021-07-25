@@ -1,5 +1,8 @@
 package com.xztx.properties;
 
+import lombok.Data;
+
+@Data
 public class AuthenticationProperties {
 
     private String loginPage;
@@ -14,51 +17,11 @@ public class AuthenticationProperties {
 
     private String loginResponseType; // json/redirect
 
-    public String getLoginResponseType() {
-        return loginResponseType;
-    }
+    private String imageCodeUrl; // 获取图形验证码地址
 
-    public void setLoginResponseType(String loginResponseType) {
-        this.loginResponseType = loginResponseType;
-    }
+    private String mobilePage; // mobile/page # 发送手机验证码地址
 
-    public String getLoginPage() {
-        return loginPage;
-    }
+    private String mobileCodeUrl; // /code/mobile # 前往手机登录页面
 
-    public void setLoginPage(String loginPage) {
-        this.loginPage = loginPage;
-    }
-
-    public String getLoginProcessingUrl() {
-        return loginProcessingUrl;
-    }
-
-    public void setLoginProcessingUrl(String loginProcessingUrl) {
-        this.loginProcessingUrl = loginProcessingUrl;
-    }
-
-    public String getUsernameParameter() {
-        return usernameParameter;
-    }
-
-    public void setUsernameParameter(String usernameParameter) {
-        this.usernameParameter = usernameParameter;
-    }
-
-    public String getPasswordParameter() {
-        return passwordParameter;
-    }
-
-    public void setPasswordParameter(String passwordParameter) {
-        this.passwordParameter = passwordParameter;
-    }
-
-    public String[] getStaticPaths() {
-        return staticPaths;
-    }
-
-    public void setStaticPaths(String[] staticPaths) {
-        this.staticPaths = staticPaths;
-    }
+    private Integer tokenValiditySeconds = 60 * 60 * 24 * 7; // 记住我时效
 }
