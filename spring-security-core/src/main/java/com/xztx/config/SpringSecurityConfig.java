@@ -100,6 +100,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
             .expiredSessionStrategy(sessionInformationExpiredStrategy) // 引入只允许一个用户登录具体实现
             .maxSessionsPreventsLogin(true);
         ;
+        http.csrf().disable();// 关闭跨域请求拦截
         http.apply(mobileAuthenticationConfig);
     }
 

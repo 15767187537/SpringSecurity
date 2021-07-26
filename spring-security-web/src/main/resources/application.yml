@@ -3,6 +3,8 @@ server:
   servlet:
     session:
       timeout: 10m #该值一定要配单位，且值一定要大于1分钟，不然是无效的
+      cookie:
+        name: JSESSIONID
 spring:
   thymeleaf:
     cache: false #关闭thymeleaf缓存
@@ -15,11 +17,9 @@ spring:
     platform: mysql
     type: com.alibaba.druid.pool.DruidDataSource
   redis:
-    database: 1
     host: 47.119.129.252
     port: 6379
     password: 123123
-    timeout: 1000
   session:
     store-type: redis # session存储方式
 
