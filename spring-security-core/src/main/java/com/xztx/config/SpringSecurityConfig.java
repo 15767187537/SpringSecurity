@@ -110,7 +110,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout()
                 .addLogoutHandler(customLogoutHandler)
                 .logoutUrl("/user/logout")
-                .logoutSuccessUrl("/mobile/page")
+                .logoutSuccessUrl("/mobile/page") // 退出成功后，成功跳转的url
                 .deleteCookies("JSESSIONID")
         ;
         http.csrf().disable();// 关闭跨域请求拦截

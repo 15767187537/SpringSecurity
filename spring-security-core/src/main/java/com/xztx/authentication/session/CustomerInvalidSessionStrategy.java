@@ -2,6 +2,7 @@ package com.xztx.authentication.session;
 
 import com.xztx.result.ResultMessage;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.session.SessionRegistry;
 import org.springframework.security.web.session.InvalidSessionStrategy;
 import org.springframework.stereotype.Component;
 
@@ -17,8 +18,18 @@ public class CustomerInvalidSessionStrategy implements InvalidSessionStrategy {
      * @param response
      * @throws IOException
      */
+
+    private SessionRegistry sessionRegistry;
+
+    public CustomerInvalidSessionStrategy(SessionRegistry sessionRegistry) {
+        this.sessionRegistry = sessionRegistry;
+    }
+
     @Override
     public void onInvalidSessionDetected(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        // 超时后删除sessionId
+        String requestedSessionId = request.getRequestedSessionId();
+        sessionRegistry.removeSessionInformation(requestedSessionId);
         // 删除cookie里的JSESSIONID
         cancelCookie(request, response);
         ResultMessage resultMessage = new ResultMessage().build(HttpStatus.UNAUTHORIZED.value(), "登录超时，请重新登录");
