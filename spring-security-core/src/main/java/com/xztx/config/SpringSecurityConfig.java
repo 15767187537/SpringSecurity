@@ -3,6 +3,7 @@ package com.xztx.config;
 import com.xztx.authentication.code.ImageCodeValidateFilter;
 import com.xztx.authentication.mobile.MobileAuthenticationConfig;
 import com.xztx.authentication.mobile.MobileValidateFilter;
+import com.xztx.authentication.session.CustomLogoutHandler;
 import com.xztx.properties.SecurityProperties;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,12 +15,15 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.session.SessionRegistry;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.authentication.logout.LogoutHandler;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.session.InvalidSessionStrategy;
 import org.springframework.security.web.session.SessionInformationExpiredStrategy;
@@ -63,6 +67,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private SessionInformationExpiredStrategy sessionInformationExpiredStrategy;
 
+    @Autowired
+    private CustomLogoutHandler customLogoutHandler;
     /***
      * 资源权限配置:
      * 被拦截的资源
@@ -90,18 +96,30 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                     ).permitAll()
             .anyRequest().authenticated() //所有访问该应用的http请求都要通过身份认证才可以进行访问
             .and()
-            .rememberMe() // 记住功能配置
-            .tokenRepository(jdbcTokenRepository()) //保存登录信息
-            .tokenValiditySeconds(securityProperties.getAuthentication().getTokenValiditySeconds()) //记住我有效时长
+                .rememberMe() // 记住功能配置
+                .tokenRepository(jdbcTokenRepository()) //保存登录信息
+                .tokenValiditySeconds(securityProperties.getAuthentication().getTokenValiditySeconds()) //记住我有效时长
             .and()
-            .sessionManagement()
-            .invalidSessionStrategy(invalidSessionStrategy)
-            .maximumSessions(1) // 只允许一个账户进行登录
-            .expiredSessionStrategy(sessionInformationExpiredStrategy) // 引入只允许一个用户登录具体实现
-            .maxSessionsPreventsLogin(true);
+                .sessionManagement()
+                .invalidSessionStrategy(invalidSessionStrategy)
+                .maximumSessions(1) // 只允许一个账户进行登录
+                .expiredSessionStrategy(sessionInformationExpiredStrategy) // 引入只允许一个用户登录具体实现
+                .maxSessionsPreventsLogin(true)
+                .sessionRegistry(getSessionRegistry())
+            .and().and()
+                .logout()
+                .addLogoutHandler(customLogoutHandler)
+                .logoutUrl("/user/logout")
+                .logoutSuccessUrl("/mobile/page")
+                .deleteCookies("JSESSIONID")
         ;
         http.csrf().disable();// 关闭跨域请求拦截
         http.apply(mobileAuthenticationConfig);
+    }
+
+    @Bean
+    public SessionRegistry getSessionRegistry() {
+        return new SessionRegistryImpl();
     }
 
     /***
